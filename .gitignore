@@ -1,5 +1,3 @@
-bin
-.git
-
-.vs/Hazel/v17
+bin/
+.vs/
 Note.md
