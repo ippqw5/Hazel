@@ -1,4 +1,0 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\amd64\Microsoft.Common.CurrentVersion.targets(2065,5): warning : The referenced project '..\Hazel.vcxproj' does not exist.
-  Application.cpp
-C:\Users\ippqw\Desktop\share\Hazel\SandBox\src\Application.cpp(7,1): warning C4326: return type of 'main' should be 'int' instead of 'void'
-  SandBox.vcxproj -> C:\Users\ippqw\Desktop\share\Hazel\bin\Debug\x64\SandBox\SandBox.exe
