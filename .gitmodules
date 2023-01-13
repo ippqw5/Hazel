@@ -1,0 +1,3 @@
+[submodule "Hazel/GLFW"]
+	path = Hazel/GLFW
+	url = https://github.com/speauty/glfw
