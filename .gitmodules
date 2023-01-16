@@ -1,6 +1,0 @@
-[submodule "Hazel/GLFW"]
-	path = Hazel/GLFW
-	url = https://github.com/speauty/glfw
-[submodule "Hazel/imgui"]
-	path = Hazel/imgui
-	url = https://github.com/TheCherno/imgui
