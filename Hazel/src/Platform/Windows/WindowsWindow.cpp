@@ -5,8 +5,7 @@
 #include "hazel\events\KeyEvent.h"
 #include "hazel\events\MouseEvent.h"
 
-#include <glad\glad.h>
-
+#include "hazel\Application.h"
 namespace Hazel {
 	
 	static bool s_GLFWInitialized = false;
@@ -31,6 +30,8 @@ namespace Hazel {
 		m_Data.Width = props.Width;
 		
 		HZ_CORE_INFO("Creating Window... {0} ({1} {2})", props.Title, props.Width, props.Height);
+		
+
 		if (!s_GLFWInitialized)
 		{
 			// ToDo: glfwTerminate on system shutdown
@@ -41,9 +42,10 @@ namespace Hazel {
 		}
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_Window);
-		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
- 		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
+		
+		m_Context = new OpenGLContext(m_Window);
+		m_Context->Init();
+		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetSync(true);
 
@@ -125,7 +127,7 @@ namespace Hazel {
 			{
 				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
 
-				MouseScrolledEvent event(xOffset, yOffset);
+				MouseScrolledEvent event((float)xOffset, (float)yOffset);
 				data.EventCallback(event);
 			});
 
@@ -147,7 +149,7 @@ namespace Hazel {
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_Window);
+		m_Context->SwapBuffers();
 	}
 
 	void WindowsWindow::SetSync(bool enabled)
@@ -163,6 +165,23 @@ namespace Hazel {
 	bool WindowsWindow::IsVSync() const
 	{
 		return m_Data.VSync;
+	}
+
+	void WindowsWindow::SwitchMouseCapture(Camera& camera)
+	{
+		if(m_MouseCaptured == true)
+		{
+			camera.UnLockCamera();
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			m_MouseCaptured = false;
+		}
+		else
+		{
+			camera.LockCamera();
+			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+			m_MouseCaptured = true;
+		}
+
 	}
 
 

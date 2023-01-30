@@ -1,9 +1,9 @@
 #pragma once
 #include "hzpch.h"
 
-#include "hazel\Core.h"
+#include "Core.h"
 #include "events\Event.h"
-
+#include "renderer\Camera.h"
 namespace Hazel 
 {
 	struct WindowProperties
@@ -12,7 +12,7 @@ namespace Hazel
 		unsigned int Width;
 		unsigned int Height;
 
-		WindowProperties(const std::string& title = "Hzael Engine",
+		WindowProperties(const std::string& title = "Hazel Engine",
 			unsigned int width = 1200,
 			unsigned int height = 720)
 			: Title(title), Width(width), Height(height)
@@ -37,6 +37,7 @@ namespace Hazel
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
+		virtual void SwitchMouseCapture(Camera& camera) = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 

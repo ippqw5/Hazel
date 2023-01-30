@@ -11,6 +11,18 @@
 
 #include "hazel\imgui\ImGuiLayer.h"
 
+// -------- Renderer --------------------
+#include "hazel\renderer\Buffer.h"
+#include "hazel\renderer\Shader.h"
+#include "hazel\\renderer\VertexArray.h"
+
+#include "hazel\renderer\Camera.h"
+
+#include "hazel\renderer\Renderer.h"
+#include "hazel\renderer\RenderCommend.h"
+// -------- Renderer --------------------
+
+
 // -------Entry Point -------------------
 #include "hazel\EntryPoint.h"
 // -------Entry Point -------------------

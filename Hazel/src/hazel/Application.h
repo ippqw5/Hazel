@@ -5,6 +5,11 @@
 
 #include "events/Event.h"
 #include "events/AppEvent.h"
+#include "imgui/ImGuiLayer.h"
+#include "renderer/Shader.h"
+#include "renderer/Buffer.h"
+#include "renderer/VertexArray.h"
+#include "renderer/Camera.h"
 
 namespace Hazel {
 
@@ -26,9 +31,10 @@ namespace Hazel {
 		bool OnWindowClosed(WindowCloseEvent& e);
 
 		std::unique_ptr<Window> m_Window;
-		bool m_Running;
-		LayerStack m_LayerStack;
+		ImGuiLayer* m_ImGuiLayer;
+		LayerStack m_LayerStack;		
 	private:
+		bool m_Running;
 		static Application* s_Instance;
 	};
 

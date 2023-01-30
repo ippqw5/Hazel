@@ -4,45 +4,52 @@
 #include "hazel/Log.h"
 #include "Input.h"
 
-#include <glad\glad.h>
+#include "renderer\Renderer.h"
+#include "KeyCodes.h"
 
 namespace Hazel {
-
 
 	Application* Application::s_Instance = nullptr;
 	Application::Application()
 	{
 		s_Instance = this;
+
 		m_Window = std::unique_ptr<Window>( Window::Create() );
-		m_Running = true;
-		 
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
+		
+		m_ImGuiLayer = new ImGuiLayer();
+		PushOverlayer(m_ImGuiLayer);
+		 
+		m_Running = true;
 	}
 
 	Application::~Application()
 	{
+
 	}
 
 	void Application::Run()
 	{	
+
 		while (m_Running)
 		{
-			glClearColor(0.0f, 1.0f, 0.8f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
 			for (auto layer : m_LayerStack)
 				layer->OnUpdate();
 
-			m_Window->OnUpdate();
-			 
+			m_ImGuiLayer->Begin();
+			for (auto layer : m_LayerStack)
+				layer->OnImGuiRender();
+			m_ImGuiLayer->End();
+
+			m_Window->OnUpdate();			 
 		}
 	}
 
 	void Application::OnEvent(Event& e)
 	{
-		//HZ_CORE_INFO("{0}", e);
 		EventDispatcher dispather(e);
 		dispather.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClosed));
+		
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
 		{

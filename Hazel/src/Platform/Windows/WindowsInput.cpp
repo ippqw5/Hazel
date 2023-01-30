@@ -5,7 +5,6 @@
 #include <GLFW\glfw3.h>
 namespace Hazel {
 
-	Input* WindowsInput::s_Instance = new WindowsInput();
 	bool WindowsInput::IsKeyPressedImpl(int keycode)
 	{
 		auto window = static_cast<GLFWwindow*>(Application::Get().GetWindow().GetNativeWindow());
