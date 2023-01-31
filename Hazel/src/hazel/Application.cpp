@@ -7,6 +7,7 @@
 #include "renderer\Renderer.h"
 #include "KeyCodes.h"
 
+#include <GLFW\glfw3.h>
 namespace Hazel {
 
 	Application* Application::s_Instance = nullptr;
@@ -16,7 +17,7 @@ namespace Hazel {
 
 		m_Window = std::unique_ptr<Window>( Window::Create() );
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
-		
+
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlayer(m_ImGuiLayer);
 		 
@@ -33,8 +34,12 @@ namespace Hazel {
 
 		while (m_Running)
 		{
+			float currentFrameTime = (float)glfwGetTime();
+			float deltaTime = currentFrameTime - m_LastFrameTime;
+			m_LastFrameTime = currentFrameTime;
+
 			for (auto layer : m_LayerStack)
-				layer->OnUpdate();
+				layer->OnUpdate(deltaTime);
 
 			m_ImGuiLayer->Begin();
 			for (auto layer : m_LayerStack)
@@ -63,7 +68,6 @@ namespace Hazel {
 	{
 		m_LayerStack.PushLayer(layer);
 		layer->OnAttach();
-		
 	}
 
 	void Application::PushOverlayer(Layer* overlayer)
@@ -71,7 +75,6 @@ namespace Hazel {
 		m_LayerStack.PushOverlayer(overlayer);
 		overlayer->OnAttach();
 	}
-
 
 	bool Application::OnWindowClosed(WindowCloseEvent& e)
 	{

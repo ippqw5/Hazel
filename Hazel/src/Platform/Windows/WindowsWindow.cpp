@@ -1,4 +1,4 @@
-#include <hzpch.h>
+#include "hzpch.h"
 #include "WindowsWindow.h"
 #include "hazel\Log.h"
 #include "hazel\events\AppEvent.h"
@@ -13,10 +13,7 @@ namespace Hazel {
 	{
 		HZ_CORE_ERROR("GLFW Error ({0}) : {1} ", error, description);
 	}
-	Window* Window::Create(const WindowProperties& props)
-	{
-		return new WindowsWindow(props);
-	}
+
 
 	WindowsWindow::WindowsWindow(const WindowProperties& props)
 	{
@@ -43,6 +40,9 @@ namespace Hazel {
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
 		
+		//
+		// glfwMakeContextCurrent(m_Window);
+		//
 		m_Context = new OpenGLContext(m_Window);
 		m_Context->Init();
 		
@@ -149,7 +149,7 @@ namespace Hazel {
 	void WindowsWindow::OnUpdate()
 	{
 		glfwPollEvents();
-		m_Context->SwapBuffers();
+		m_Context->SwapBuffers(); //glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetSync(bool enabled)
@@ -183,8 +183,6 @@ namespace Hazel {
 		}
 
 	}
-
-
 
 	void WindowsWindow::Shutdown()
 	{

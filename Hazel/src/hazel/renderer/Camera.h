@@ -9,7 +9,9 @@ namespace Hazel {
 		FORWARD,
 		BACKWARD,
 		LEFT,
-		RIGHT
+		RIGHT,
+		ROTATE,
+		ROTATE_ANTI
 	};
 
 	class Camera
@@ -22,11 +24,13 @@ namespace Hazel {
 		virtual const glm::mat4& GetProjectionMatrix() = 0;
 		virtual glm::mat4 GetViewMatrix() = 0;
 
-		virtual void KeyboardInput(Direction direction) {};
-		virtual void MouseMovement(float xpos, float ypos) {};
+		virtual void KeyboardInput(Direction direction, float deltaTime) = 0;
+		virtual void MouseMovement(float xpos, float ypos) = 0;
 
-		virtual void LockCamera() {};
-		virtual void UnLockCamera() {};
+		virtual void LockCamera() = 0;
+		virtual void UnLockCamera() = 0;
+
+		virtual void ResetCamera() = 0;
 	};
 	
 	class OrthographicCamera : public Camera
@@ -40,19 +44,31 @@ namespace Hazel {
 		inline virtual const glm::mat4& GetProjectionMatrix() override { return m_ProjectionMatrix; }
 		inline virtual glm::mat4 GetViewMatrix() override
 		{
-			return glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+			m_ViewMatrix = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+			return m_ViewMatrix;
 		}
 
-		virtual void KeyboardInput(Direction direction) override {};
-		virtual void MouseMovement(float xpos, float ypos) override {};
+		virtual void KeyboardInput(Direction direction, float deltaTime) override ;
+		virtual void MouseMovement(float xpos, float ypos) override ;
 
 		inline virtual void LockCamera() { m_Locked = true; }
 		inline virtual void UnLockCamera() { m_Locked = false; }
+
+		inline virtual void ResetCamera() 
+		{
+			m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+			m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+			m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+		};
 	private:
 		glm::vec3 m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 		glm::vec3 m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::mat4 m_ProjectionMatrix;
+		glm::mat4 m_ViewMatrix;
+		float m_CameraSpeed = 2.5f;
+		float m_CameraRotateSpeed = 2.0f; // degree
+
 	private:
 		bool m_FirstMouse = true;
 		bool m_Locked = true;
@@ -69,20 +85,35 @@ namespace Hazel {
 		inline virtual const glm::mat4& GetProjectionMatrix() override { return m_ProjectionMatrix; }
 		inline virtual glm::mat4 GetViewMatrix() override
 		{
-			return glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+			m_ViewMatrix = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
+			return m_ViewMatrix;
 		}
+		inline virtual void ResetCamera()
+		{
+			m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
+			m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+			m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
+			m_Yaw = -90.0f;
+			m_Pitch = 0.0f;
+		};
 
-		virtual void KeyboardInput(Direction direction) override;
+		virtual void KeyboardInput(Direction direction, float deltaTime) override;
 		virtual void MouseMovement(float xpos, float ypos) override;
 
 		inline virtual void LockCamera() { m_Locked = true; }
-		inline virtual void UnLockCamera() { m_Locked = false; }
+		inline virtual void UnLockCamera() 
+		{ 
+			m_Locked = false; 
+			m_FirstMouse = true;
+		}
 	private:
 		glm::vec3 m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 		glm::vec3 m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 		glm::vec3 m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
 		glm::mat4 m_ProjectionMatrix;
-		float m_CameraSpeed = 0.05f;
+		glm::mat4 m_ViewMatrix;
+		float m_CameraSpeed = 2.5f;
+		float m_CameraRotateSpeed = 2.0f; // degree
 
 	private:
 		float m_Fov, m_Fov_U, m_Fov_B;

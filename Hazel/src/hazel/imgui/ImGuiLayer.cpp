@@ -1,7 +1,5 @@
 #include <hzpch.h>
 #include "ImGuiLayer.h"
-#include "hazel\KeyCodes.h"
-#include "hazel\MouseButtonCodes.h"
 #include "hazel\Application.h"
 
 #include <backends\imgui_impl_glfw.h>

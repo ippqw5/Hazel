@@ -2,29 +2,64 @@
 #include "Camera.h"
 
 namespace Hazel {
+
+	// --------------------------------------------------
+	// Orthographic Camera ------------------------------
+	// --------------------------------------------------
 	OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
 		: m_ProjectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f))
 	{
+		m_ViewMatrix = glm::mat4(1.0f);
 	}
 
+	void OrthographicCamera::KeyboardInput(Direction direction, float deltaTime)
+	{
+	}
+
+	void OrthographicCamera::MouseMovement(float xpos, float ypos)
+	{
+	}
+
+
+	// --------------------------------------------------
+	// Persepective Camera ------------------------------
+	// --------------------------------------------------
 	PerspectiveCamera::PerspectiveCamera(float Fov, float Aspect, float Near, float Far, float FOV_U, float FOV_B)
 		: m_Fov(Fov), m_Fov_U(FOV_U), m_Fov_B(FOV_B), m_Aspect(Aspect), m_Near(Near), m_Far(Far),
 		m_Yaw(-90.0f), m_Pitch(0.0f), m_LastX(0.0f), m_LastY(0.0f)
 	{
 		m_ProjectionMatrix = glm::perspective(glm::radians(Fov), Aspect, Near, Far);
+		m_ViewMatrix = glm::mat4(1.0f);
 	}
 
-	void PerspectiveCamera::KeyboardInput(Direction direction)
+	void PerspectiveCamera::KeyboardInput(Direction direction,float deltaTime)
 	{
 		if (m_Locked == true) return;
-		if (direction == Direction::FORWARD)
-			m_CameraPos += m_CameraSpeed * m_CameraFront;
-		if (direction == Direction::BACKWARD)
-			m_CameraPos -= m_CameraSpeed * m_CameraFront;
-		if (direction == Direction::LEFT)
-			m_CameraPos -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * m_CameraSpeed;
-		if (direction == Direction::RIGHT)
-			m_CameraPos += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * m_CameraSpeed;
+		switch (direction)
+		{
+		case Hazel::Direction::FORWARD:
+			m_CameraPos += deltaTime * m_CameraSpeed * m_CameraFront;
+			break;
+		case Hazel::Direction::BACKWARD:
+			m_CameraPos -= deltaTime * m_CameraSpeed * m_CameraFront;
+			break;
+		case Hazel::Direction::LEFT:
+			m_CameraPos -= glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * deltaTime * m_CameraSpeed;
+			break;
+		case Hazel::Direction::RIGHT:
+			m_CameraPos += glm::normalize(glm::cross(m_CameraFront, m_CameraUp)) * deltaTime * m_CameraSpeed;
+			break;
+		case Hazel::Direction::ROTATE:
+			m_CameraUp = glm::rotate(glm::mat4(1.0f), glm::radians(m_CameraRotateSpeed), deltaTime * m_CameraFront)
+				* glm::vec4(m_CameraUp, 1.0f);
+			break;
+		case Hazel::Direction::ROTATE_ANTI:
+			m_CameraUp = glm::rotate(glm::mat4(1.0f), glm::radians(-m_CameraRotateSpeed), deltaTime * m_CameraFront)
+				* glm::vec4(m_CameraUp, 1.0f);
+			break;
+		default:
+			break;
+		}
 	}
 
 	void PerspectiveCamera::MouseMovement(float xpos, float ypos)
@@ -49,10 +84,10 @@ namespace Hazel {
 		m_Yaw += xoffset;
 		m_Pitch += yoffset;
 
-		if (m_Pitch > 89.0f)
-			m_Pitch = 89.0f;
-		if (m_Pitch < -89.0f)
-			m_Pitch = -89.0f;
+		if (m_Pitch > 360.0f)
+			m_Pitch -= 360.f;
+		if (m_Pitch < -360.f)
+			m_Pitch += 360.f;
 
 		glm::vec3 front(0.0f);
 		front.x = cos(glm::radians(m_Yaw)) * cos(glm::radians(m_Pitch));

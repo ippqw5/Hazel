@@ -11,6 +11,7 @@ namespace Hazel {
 	void OpenGLContext::Init()
 	{
 		glfwMakeContextCurrent(m_Windowhandle);
+
 		int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		HZ_CORE_ASSERT(status, "Failed to initialize Glad!");
 

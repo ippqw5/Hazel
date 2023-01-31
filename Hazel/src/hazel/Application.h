@@ -29,13 +29,15 @@ namespace Hazel {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
-
-		std::unique_ptr<Window> m_Window;
-		ImGuiLayer* m_ImGuiLayer;
-		LayerStack m_LayerStack;		
+	
 	private:
 		bool m_Running;
+		float m_LastFrameTime = 0.0f;
+		
+		LayerStack m_LayerStack;		
+		ImGuiLayer* m_ImGuiLayer;
 		static Application* s_Instance;
+		std::unique_ptr<Window> m_Window;
 	};
 
 	// To be defined in CLIENT
