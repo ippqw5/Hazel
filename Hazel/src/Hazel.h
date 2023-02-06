@@ -26,6 +26,7 @@
 // -------- Renderer --------------------
 #include "hazel\renderer\Buffer.h"
 #include "hazel\renderer\Shader.h"
+#include "hazel\renderer\Texture.h"
 #include "hazel\\renderer\VertexArray.h"
 
 #include "hazel\renderer\Camera.h"

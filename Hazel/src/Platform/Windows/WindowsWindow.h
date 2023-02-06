@@ -17,17 +17,18 @@ namespace Hazel {
 
 		void OnUpdate() override;
 
-		inline unsigned int GetWidth() const override { return m_Data.Width;}
-		inline unsigned int GetHeight() const override { return m_Data.Height;}
-		
+		inline unsigned int GetWidth() const override { return m_Data.Width; }
+		inline unsigned int GetHeight() const override { return m_Data.Height; }
+
 		//Window attributes
 		inline void SetEventCallback(const EventCallbackFn& callback) override
-		{ 
-			m_Data.EventCallback = callback; 
+		{
+			m_Data.EventCallback = callback;
 		}
 		void SetSync(bool enabled) override;
 		bool IsVSync() const override;
-		virtual void SwitchMouseCapture(Camera& camera) override;
+		void SwitchMouseCapture(PerspectiveCamera& camera) override;
+		void SwitchMouseCapture(OrthographicCamera& camera) override {};
 
 		inline void* GetNativeWindow() const override { return m_Window; };
 

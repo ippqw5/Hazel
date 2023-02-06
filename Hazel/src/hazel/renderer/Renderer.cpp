@@ -4,7 +4,12 @@
 namespace Hazel {
 
 	Renderer::Matrix_VP* Renderer::m_Matrix_VP = new Matrix_VP;
-	void Renderer::BeginScene(Camera& camera)
+
+	void Renderer::Init()
+	{
+		RenderCommend::Init();
+	}
+	void Renderer::BeginScene(PerspectiveCamera& camera)
 	{
 		m_Matrix_VP->viewMatrix = camera.GetViewMatrix();
 		m_Matrix_VP->projectionMatrix = camera.GetProjectionMatrix();

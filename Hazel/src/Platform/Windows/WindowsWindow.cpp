@@ -167,7 +167,7 @@ namespace Hazel {
 		return m_Data.VSync;
 	}
 
-	void WindowsWindow::SwitchMouseCapture(Camera& camera)
+	void WindowsWindow::SwitchMouseCapture(PerspectiveCamera& camera)
 	{
 		if(m_MouseCaptured == true)
 		{

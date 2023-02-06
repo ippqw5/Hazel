@@ -12,15 +12,6 @@ namespace Hazel {
 		m_ViewMatrix = glm::mat4(1.0f);
 	}
 
-	void OrthographicCamera::KeyboardInput(Direction direction, float deltaTime)
-	{
-	}
-
-	void OrthographicCamera::MouseMovement(float xpos, float ypos)
-	{
-	}
-
-
 	// --------------------------------------------------
 	// Persepective Camera ------------------------------
 	// --------------------------------------------------
@@ -56,6 +47,12 @@ namespace Hazel {
 		case Hazel::Direction::ROTATE_ANTI:
 			m_CameraUp = glm::rotate(glm::mat4(1.0f), glm::radians(-m_CameraRotateSpeed), deltaTime * m_CameraFront)
 				* glm::vec4(m_CameraUp, 1.0f);
+			break;
+		case Hazel::Direction::UP :
+			m_CameraPos += deltaTime * m_CameraSpeed * m_CameraUp;
+			break;
+		case Hazel::Direction::DOWN :
+			m_CameraPos -= deltaTime * m_CameraSpeed * m_CameraUp;
 			break;
 		default:
 			break;
@@ -96,5 +93,15 @@ namespace Hazel {
 		m_CameraFront = glm::normalize(front);
 	}
 
+	void PerspectiveCamera::MouseScroll(float xoffset, float yoffset)
+	{
+		if (m_Locked == true) return;
+		float temp = m_Fov - yoffset;
+		if (m_Fov_B <= temp && temp <= m_Fov_U)	m_Fov = temp;
+		else if (m_Fov_B > temp)				m_Fov = m_Fov_B;
+		else									m_Fov = m_Fov_U;
+
+		m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), m_Aspect, m_Near, m_Far);
+	}
 
 }

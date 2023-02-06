@@ -11,50 +11,39 @@ namespace Hazel {
 		LEFT,
 		RIGHT,
 		ROTATE,
-		ROTATE_ANTI
-	};
-
-	class Camera
-	{
-	public:
-		Camera() {}
-		virtual const glm::vec3& GetPosition() = 0;
-		virtual void SetPosition(const glm::vec3& pos) = 0;
-
-		virtual const glm::mat4& GetProjectionMatrix() = 0;
-		virtual glm::mat4 GetViewMatrix() = 0;
-
-		virtual void KeyboardInput(Direction direction, float deltaTime) = 0;
-		virtual void MouseMovement(float xpos, float ypos) = 0;
-
-		virtual void LockCamera() = 0;
-		virtual void UnLockCamera() = 0;
-
-		virtual void ResetCamera() = 0;
+		ROTATE_ANTI,
+		UP,
+		DOWN
 	};
 	
-	class OrthographicCamera : public Camera
+	class OrthographicCamera
 	{
 	public:
+		OrthographicCamera() = default;
 		OrthographicCamera(float left,float right, float bottom, float top);
 	
-		inline virtual const glm::vec3& GetPosition() override { return m_CameraPos; }
-		inline virtual void SetPosition(const glm::vec3& pos) override { m_CameraPos = pos; }
+		void SetPosition(const glm::vec3& pos) { m_CameraPos = pos; }
 
-		inline virtual const glm::mat4& GetProjectionMatrix() override { return m_ProjectionMatrix; }
-		inline virtual glm::mat4 GetViewMatrix() override
+		const glm::vec3& GetPosition() { return m_CameraPos; }
+		const glm::mat4& GetProjectionMatrix()  { return m_ProjectionMatrix; }
+		glm::mat4 GetViewMatrix() 
 		{
 			m_ViewMatrix = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
 			return m_ViewMatrix;
 		}
 
-		virtual void KeyboardInput(Direction direction, float deltaTime) override ;
-		virtual void MouseMovement(float xpos, float ypos) override ;
+		void KeyboardInput(Direction direction, float deltaTime)  {};
+		void MouseMovement(float xpos, float ypos)  {};
+		void MouseScroll(float xoffset, float yoffset)  {};
 
-		inline virtual void LockCamera() { m_Locked = true; }
-		inline virtual void UnLockCamera() { m_Locked = false; }
+		void LockCamera() { m_Locked = true; }
+		void UnLockCamera()
+		{
+			m_Locked = false;
+			m_FirstMouse = true;
+		}
 
-		inline virtual void ResetCamera() 
+		void ResetCamera() 
 		{
 			m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 			m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -74,22 +63,24 @@ namespace Hazel {
 		bool m_Locked = true;
 	};
 
-	class PerspectiveCamera : public Camera
+	class PerspectiveCamera
 	{
 	public:
-		PerspectiveCamera(float fov, float aspect, float Near, float Far, float FOV_U = 45.0f, float FOV_B = 65.0f);
+		PerspectiveCamera() = default;
+		PerspectiveCamera(float fov, float aspect, float Near, float Far, float FOV_U = 65.0f, float FOV_B = 45.0f);
 
-		inline virtual const glm::vec3& GetPosition() override { return m_CameraPos; }
-		inline virtual void SetPosition(const glm::vec3& pos) override { m_CameraPos = pos; }
+		void SetPosition(const glm::vec3& pos) { m_CameraPos = pos; }
 
-		inline virtual const glm::mat4& GetProjectionMatrix() override { return m_ProjectionMatrix; }
-		inline virtual glm::mat4 GetViewMatrix() override
+		const glm::vec3& GetPosition() { return m_CameraPos; }
+		const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
+		glm::mat4 GetViewMatrix() 
 		{
 			m_ViewMatrix = glm::lookAt(m_CameraPos, m_CameraPos + m_CameraFront, m_CameraUp);
 			return m_ViewMatrix;
 		}
-		inline virtual void ResetCamera()
+		void ResetCamera()
 		{
+			if (m_Locked) return;
 			m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
 			m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
 			m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
@@ -97,11 +88,12 @@ namespace Hazel {
 			m_Pitch = 0.0f;
 		};
 
-		virtual void KeyboardInput(Direction direction, float deltaTime) override;
-		virtual void MouseMovement(float xpos, float ypos) override;
+		void KeyboardInput(Direction direction, float deltaTime) ;
+		void MouseMovement(float xpos, float ypos) ;
+		void MouseScroll(float xoffset, float yoffset) ;
 
-		inline virtual void LockCamera() { m_Locked = true; }
-		inline virtual void UnLockCamera() 
+		void LockCamera() { m_Locked = true; }
+		void UnLockCamera() 
 		{ 
 			m_Locked = false; 
 			m_FirstMouse = true;

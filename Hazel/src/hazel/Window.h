@@ -37,7 +37,8 @@ namespace Hazel
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
 		virtual void SetSync(bool enabled) = 0;
 		virtual bool IsVSync() const = 0;
-		virtual void SwitchMouseCapture(Camera& camera) = 0;
+		virtual void SwitchMouseCapture(PerspectiveCamera& camera) = 0;
+		virtual void SwitchMouseCapture(OrthographicCamera& camera) = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 
