@@ -16,7 +16,7 @@ class ExampleLayer : public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("example")
+		: Layer("example"), m_CameraController(1280.0f/720.0f, true)
 	{
 		m_Camera.reset(new Hazel::PerspectiveCamera(60.0f, 16.0f / 9.0f, 0.1f, 100.0f));
 
@@ -115,14 +115,18 @@ public:
 
 	void OnUpdate(Hazel::Timestep ts) override
 	{
+		// Update
+		m_CameraController.Update(ts);
+		
 		//HZ_TRACE("DeltaTime : {0}s({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
-		CameraMove(ts);
+		//CameraMove(ts);
 
+		// Render
 		Hazel::RenderCommend::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
 		Hazel::RenderCommend::Clear();
 
 
-		Hazel::Renderer::BeginScene(*m_Camera);
+		Hazel::Renderer::BeginScene(m_CameraController.GetCamera());
 
 		static glm::mat4 scale = glm::scale(glm::mat4(1.0f), { 0.5,0.5f,0.5f });
 
@@ -160,12 +164,14 @@ public:
 
 	void OnEvent(Hazel::Event& e) override
 	{
-		Hazel::EventDispatcher dispather(e);
-		dispather.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressed));
-		dispather.Dispatch<Hazel::MouseMovedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseMoved));
-		dispather.Dispatch<Hazel::MouseScrolledEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseScroll));
+		m_CameraController.OnEvent(e);
+		//Hazel::EventDispatcher dispather(e);
+		//dispather.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressed));
+		//dispather.Dispatch<Hazel::MouseMovedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseMoved));
+		//dispather.Dispatch<Hazel::MouseScrolledEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseScroll));
 	}
 private:
+	Hazel::OrthographicCameraController m_CameraController;
 	Hazel::Ref<Hazel::PerspectiveCamera> m_Camera;
 
 	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
@@ -183,7 +189,8 @@ private:
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
 	Hazel::Ref<Hazel::Texture2D> m_Texture2D;
 private:
-	void CameraMove(float deltaTime)
+
+	/*void CameraMove(float deltaTime)
 	{
 		if (Hazel::Input::IsKeyPressed(HZ_KEY_W))
 			m_Camera->KeyboardInput(Hazel::Direction::FORWARD, deltaTime);
@@ -228,7 +235,7 @@ private:
 	{
 		m_Camera->MouseScroll(e.GetXOffset(), e.GetYOffset());
 		return true;
-	}
+	}*/
 };
 
 class SandBox : public Hazel::Application

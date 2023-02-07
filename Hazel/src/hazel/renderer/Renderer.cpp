@@ -14,6 +14,11 @@ namespace Hazel {
 		m_Matrix_VP->viewMatrix = camera.GetViewMatrix();
 		m_Matrix_VP->projectionMatrix = camera.GetProjectionMatrix();
 	}
+	void Renderer::BeginScene(OrthographicCamera& camera)
+	{
+		m_Matrix_VP->viewMatrix = camera.GetViewMatrix();
+		m_Matrix_VP->projectionMatrix = camera.GetProjectionMatrix();
+	}
 
 	void Renderer::EndScene()
 	{
