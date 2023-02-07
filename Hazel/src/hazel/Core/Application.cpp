@@ -1,11 +1,11 @@
 #include "hzpch.h"
 #include "Application.h"
 
-#include "hazel/Log.h"
-#include "Input.h"
+#include "hazel\Core\Log.h"
+#include "hazel\Core\Input.h"
+#include "hazel\Core\KeyCodes.h"
 
-#include "renderer\Renderer.h"
-#include "KeyCodes.h"
+#include "hazel\renderer\Renderer.h"
 
 #include <GLFW\glfw3.h>
 namespace Hazel {

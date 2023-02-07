@@ -1,7 +1,7 @@
 #pragma once
 
-#include "hazel\Core.h"
-#include "hazel\Layer.h"
+#include "hazel\Core\Core.h"
+#include "hazel\Core\Layer.h"
 
 namespace Hazel {
 	class HAZEL_API ImGuiLayer : public Layer

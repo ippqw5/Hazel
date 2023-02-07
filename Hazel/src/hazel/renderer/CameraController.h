@@ -20,13 +20,15 @@ namespace Hazel {
 		OrthographicCamera& GetCamera() { return m_Camera; }
 		const OrthographicCamera& GetCamera() const { return m_Camera; }
 
-		void Lock() 
+		void LockSwitch() 
 		{
 			m_Lock = (!m_Lock);
 		}
 		void Reset() 
 		{
-			m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+			m_Camera.m_Position = { 0.0f, 0.0f, 0.0f };
+			m_Camera.m_Front = { 0.0f, 0.0f, -1.0f };
+			m_Camera.m_Up = { 0.0f, 1.0f, 0.0f };
 			m_CameraRotation = 0.0f;
 		}
 	private:
@@ -42,7 +44,6 @@ namespace Hazel {
 
 		OrthographicCamera m_Camera;
 
-		glm::vec3 m_CameraPosition = { 0.0f,0.0f,0.0f };
 		float m_CameraRotation = 0.0f;
 		float m_CameraTranslationSpeed = 2.5f;
 		float m_CameraRotationSpeed = 20.0f; // degree
@@ -52,21 +53,46 @@ namespace Hazel {
 	class PerspectiveCameraController
 	{
 	public:
-		PerspectiveCameraController(float aspectRatio);
+		PerspectiveCameraController(float aspectRatio, float fov, float Near, float Far, bool rotation = false);
 
 		void Update(Timestep ts);
 		void OnEvent(Event& e);
 
+		PerspectiveCamera& GetCamera() { return m_Camera; }
+		const PerspectiveCamera& GetCamera() const { return m_Camera; }
+
+		void LockSwitch()
+		{
+			m_Lock = (!m_Lock);
+			m_FirstMouse = true;
+		}
+		void Reset()
+		{
+			if (m_Lock) return;
+			m_Camera.m_Position = { 0.0f, 0.0f, 3.0f };
+			m_Camera.m_Front = { 0.0f, 0.0f, -1.0f };
+			m_Camera.m_Up = { 0.0f, 1.0f, 0.0f };
+			
+			m_Camera.m_Yaw = -90.0f;
+			m_Camera.m_Pitch = 0.0f;
+		}
 	private:
+		bool OnMouseMovement(MouseMovedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);
 		bool OnWindowResized(WindowResizeEvent& e);
+		bool OnKeyPressed(KeyPressedEvent& e);
+
 	private:
 		float m_AspectRatio;
 		float m_ZoomLevel = 1.0f;
 
+		bool  m_Rotation;
+		bool  m_Lock = true;
+		bool  m_FirstMouse = true;
+
 		PerspectiveCamera m_Camera;
-		glm::vec3 m_CameraPosition = { 0.0f,0.0f,0.0f };
-		float m_CameraTranslateSpeed = 2.5f;
-		float m_CameraRotateSpeed = 0.5f; // degree
+
+		float m_CameraTranslationSpeed = 2.5f;
+		float m_CameraRotationSpeed = 20.0f; // degree
 	};
 }

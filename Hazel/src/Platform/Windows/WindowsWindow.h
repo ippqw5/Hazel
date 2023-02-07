@@ -1,6 +1,6 @@
 #pragma once
 
-#include "hazel\Window.h"
+#include "hazel\Core\Window.h"
 #include "hazel\renderer\Camera.h"
 #include "Platform\OpenGL\OpenGLContext.h"
 
@@ -27,8 +27,8 @@ namespace Hazel {
 		}
 		void SetSync(bool enabled) override;
 		bool IsVSync() const override;
-		void SwitchMouseCapture(PerspectiveCamera& camera) override;
-		void SwitchMouseCapture(OrthographicCamera& camera) override {};
+		void LockSwitch() override;
+		
 
 		inline void* GetNativeWindow() const override { return m_Window; };
 
@@ -50,6 +50,6 @@ namespace Hazel {
 		
 		WindowData m_Data;
 	private:
-		bool m_MouseCaptured = true;
+		bool m_Lock = true;
 	};
 }

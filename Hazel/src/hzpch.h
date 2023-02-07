@@ -14,7 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 
-#include "hazel\Log.h"
+#include "hazel\Core\Log.h"
 
 #ifdef HZ_PLATFORM_WINDOWS
 	

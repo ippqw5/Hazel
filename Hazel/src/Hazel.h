@@ -1,14 +1,13 @@
 #pragma once
 
 // For use by Hazel applications
-#include "hazel\Application.h"
-#include "hazel\Layer.h"
-#include "hazel\Log.h"
+#include "hazel\Core\Application.h"
+#include "hazel\Core\Layer.h"
+#include "hazel\Core\Log.h"
 
-#include "hazel\Input.h"
-#include "hazel\KeyCodes.h"
-#include "hazel\MouseButtonCodes.h"
-#include "hazel\CameraController.h"
+#include "hazel\Core\Input.h"
+#include "hazel\Core\KeyCodes.h"
+#include "hazel\Core\MouseButtonCodes.h"
 
 // -------- Imgui --------------------
 #include "hazel\imgui\ImGuiLayer.h"
@@ -31,6 +30,7 @@
 #include "hazel\\renderer\VertexArray.h"
 
 #include "hazel\renderer\Camera.h"
+#include "hazel\Renderer\CameraController.h"
 
 #include "hazel\renderer\Renderer.h"
 #include "hazel\renderer\RenderCommend.h"
@@ -38,4 +38,4 @@
 
 
 // -------Entry Point -------------------
-#include "hazel\EntryPoint.h"
+#include "hazel\Core\EntryPoint.h"

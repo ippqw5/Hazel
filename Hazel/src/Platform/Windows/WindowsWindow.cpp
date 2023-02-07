@@ -1,11 +1,12 @@
 #include "hzpch.h"
 #include "WindowsWindow.h"
-#include "hazel\Log.h"
+#include "hazel\Core\Log.h"
+#include "hazel\Core\Application.h"
+
 #include "hazel\events\AppEvent.h"
 #include "hazel\events\KeyEvent.h"
 #include "hazel\events\MouseEvent.h"
 
-#include "hazel\Application.h"
 namespace Hazel {
 	
 	static bool s_GLFWInitialized = false;
@@ -39,7 +40,7 @@ namespace Hazel {
 		}
 
 		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
-		
+
 		//
 		// glfwMakeContextCurrent(m_Window);
 		//
@@ -168,19 +169,17 @@ namespace Hazel {
 		return m_Data.VSync;
 	}
 
-	void WindowsWindow::SwitchMouseCapture(PerspectiveCamera& camera)
+	void WindowsWindow::LockSwitch()
 	{
-		if(m_MouseCaptured == true)
+		if(m_Lock == true)
 		{
-			camera.UnLockCamera();
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-			m_MouseCaptured = false;
+			m_Lock = false;
 		}
 		else
 		{
-			camera.LockCamera();
 			glfwSetInputMode(m_Window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-			m_MouseCaptured = true;
+			m_Lock = true;
 		}
 
 	}

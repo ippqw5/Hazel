@@ -16,9 +16,10 @@ class ExampleLayer : public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("example"), m_CameraController(1280.0f/720.0f, true)
+		: Layer("example"), m_CameraController(1280.0f/720.0f, true),
+		m_PerspectiveCameraController(1280.0f/720.f, 60.0f, 0.1f, 100.0f)
 	{
-		m_Camera.reset(new Hazel::PerspectiveCamera(60.0f, 16.0f / 9.0f, 0.1f, 100.0f));
+		//m_Camera.reset(new Hazel::PerspectiveCamera(60.0f, 16.0f / 9.0f, 0.1f, 100.0f));
 
 		float vertices[] = {
 //      |     --Pos--     |     -- Color --       |  -- Tex -- |   
@@ -172,7 +173,8 @@ public:
 	}
 private:
 	Hazel::OrthographicCameraController m_CameraController;
-	Hazel::Ref<Hazel::PerspectiveCamera> m_Camera;
+	Hazel::PerspectiveCameraController m_PerspectiveCameraController;
+	//Hazel::Ref<Hazel::PerspectiveCamera> m_Camera;
 
 	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
 

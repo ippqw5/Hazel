@@ -3,13 +3,13 @@
 #include "Window.h"
 #include "LayerStack.h"
 
-#include "events/Event.h"
-#include "events/AppEvent.h"
-#include "imgui/ImGuiLayer.h"
-#include "renderer/Shader.h"
-#include "renderer/Buffer.h"
-#include "renderer/VertexArray.h"
-#include "renderer/Camera.h"
+#include "hazel\events\Event.h"
+#include "hazel\events\AppEvent.h"
+#include "hazel\imgui\ImGuiLayer.h"
+#include "hazel\renderer\Shader.h"
+#include "hazel\renderer\Buffer.h"
+#include "hazel\renderer\VertexArray.h"
+#include "hazel\renderer\Camera.h"
 
 namespace Hazel {
 
