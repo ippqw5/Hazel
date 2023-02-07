@@ -38,12 +38,15 @@ namespace Hazel {
 		while (m_Running)
 		{
 			float currentFrameTime = (float)glfwGetTime();
-			float deltaTime = currentFrameTime - m_LastFrameTime;
+			Timestep deltaTime = currentFrameTime - m_LastFrameTime;
 			m_LastFrameTime = currentFrameTime;
 
-			for (auto layer : m_LayerStack)
-				layer->OnUpdate(deltaTime);
-
+			if (!m_Minimized)
+			{
+				for (auto layer : m_LayerStack)
+					layer->OnUpdate(deltaTime);
+			}
+			
 			m_ImGuiLayer->Begin();
 			for (auto layer : m_LayerStack)
 				layer->OnImGuiRender();
@@ -57,6 +60,7 @@ namespace Hazel {
 	{
 		EventDispatcher dispather(e);
 		dispather.Dispatch<WindowCloseEvent>(HZ_BIND_EVENT_FN(Application::OnWindowClosed));
+		dispather.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(Application::OnWindowResize));
 		
 
 		for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -83,5 +87,18 @@ namespace Hazel {
 	{
 		m_Running = false;
 		return true;
+	}
+
+	bool Application::OnWindowResize(WindowResizeEvent& e)
+	{
+		if (e.GetWidth() == 0 || e.GetHeight() == 0)
+		{
+			m_Minimized = true;
+			return false;
+		}
+		m_Minimized = false;
+		Renderer::OnWindowResize(e.GetWidth(), e.GetHeight());
+
+		return false;
 	}
 }

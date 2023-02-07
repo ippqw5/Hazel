@@ -29,9 +29,9 @@ namespace Hazel {
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
-	
+		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		bool m_Running;
+		bool m_Running, m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
 		
 		LayerStack m_LayerStack;		

@@ -61,12 +61,12 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
-		if (m_Lock) return true;
+		if (m_Lock) return false;
 		m_ZoomLevel -= e.GetYOffset() * 0.5f;
 		m_ZoomLevel = std::max(0.5f, m_ZoomLevel);
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 
-		return true;
+		return false;
 	}
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
@@ -81,14 +81,14 @@ namespace Hazel {
 		if (e.GetKeyCode() == HZ_KEY_LEFT_ALT)
 		{
 			Lock();
-			return true;
+			return false;
 		}
 		if (e.GetKeyCode() == HZ_KEY_R)
 		{
 			Reset();
-			return true;
+			return false;
 		}
-		return true;
+		return false;
 	}
 
 	/// <summary>

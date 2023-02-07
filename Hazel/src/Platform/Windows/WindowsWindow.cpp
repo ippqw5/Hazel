@@ -56,6 +56,7 @@ namespace Hazel {
 				data.Width = width; data.Height = height;
 
 				WindowResizeEvent e(width, height);
+				HZ_WARN("{0}, {1}", width, height);
 				data.EventCallback(e);
 
 		});

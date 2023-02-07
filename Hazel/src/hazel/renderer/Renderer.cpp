@@ -9,11 +9,18 @@ namespace Hazel {
 	{
 		RenderCommend::Init();
 	}
+
+	void Renderer::OnWindowResize(uint32_t width, uint32_t height)
+	{
+		RenderCommend::SetViewport(0, 0, width, height);
+	}
+
 	void Renderer::BeginScene(PerspectiveCamera& camera)
 	{
 		m_Matrix_VP->viewMatrix = camera.GetViewMatrix();
 		m_Matrix_VP->projectionMatrix = camera.GetProjectionMatrix();
 	}
+
 	void Renderer::BeginScene(OrthographicCamera& camera)
 	{
 		m_Matrix_VP->viewMatrix = camera.GetViewMatrix();
