@@ -19,8 +19,8 @@ namespace Hazel {
 	// --------------------------------------------------
 	// Persepective Camera ------------------------------
 	// --------------------------------------------------
-	PerspectiveCamera::PerspectiveCamera(float Fov, float Aspect, float Near, float Far, float FOV_U, float FOV_B)
-		: m_Fov(Fov), m_Fov_U(FOV_U), m_Fov_B(FOV_B), m_Aspect(Aspect), m_Near(Near), m_Far(Far),
+	PerspectiveCamera::PerspectiveCamera(float Fov, float Aspect, float Near, float Far, float FOV_B, float FOV_U)
+		: m_Fov(Fov), m_Fov_B(FOV_B), m_Fov_U(FOV_U), m_Aspect(Aspect), m_Near(Near), m_Far(Far),
 		m_Yaw(-90.0f), m_Pitch(0.0f), m_LastX(0.0f), m_LastY(0.0f)
 	{
 		m_ProjectionMatrix = glm::perspective(glm::radians(Fov), Aspect, Near, Far);
@@ -29,6 +29,7 @@ namespace Hazel {
 
 	void PerspectiveCamera::SetProjection(float fov, float aspect, float Near, float Far)
 	{
+		m_Aspect = aspect;
 		m_ProjectionMatrix = glm::perspective(glm::radians(fov), aspect, Near, Far);
 	}
 

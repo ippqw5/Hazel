@@ -128,8 +128,8 @@ namespace Hazel {
 		Hazel::EventDispatcher dispather(e);
 		dispather.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnKeyPressed));
 		dispather.Dispatch<MouseMovedEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnMouseMovement));
-		//dispather.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnMouseScrolled));
-		//dispather.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnWindowResized));
+		dispather.Dispatch<WindowResizeEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnWindowResized));
+		dispather.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnMouseScrolled));
 	}
 
 
@@ -189,6 +189,8 @@ namespace Hazel {
 
 	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
+		m_Camera.SetProjection(m_Camera.m_Fov, m_AspectRatio, m_Camera.m_Near, m_Camera.m_Far);
 		return false;
 	}
 

@@ -16,10 +16,9 @@ class ExampleLayer : public Hazel::Layer
 {
 public:
 	ExampleLayer()
-		: Layer("example"), m_CameraController(1280.0f/720.0f, true),
-		m_PerspectiveCameraController(1280.0f/720.f, 60.0f, 0.1f, 100.0f)
+		: Layer("example"), //m_CameraController(1280.0f/720.0f, true),
+		m_CameraController(1280.0f/720.f, 60.0f, 0.1f, 100.0f)
 	{
-		//m_Camera.reset(new Hazel::PerspectiveCamera(60.0f, 16.0f / 9.0f, 0.1f, 100.0f));
 
 		float vertices[] = {
 //      |     --Pos--     |     -- Color --       |  -- Tex -- |   
@@ -118,9 +117,6 @@ public:
 	{
 		// Update
 		m_CameraController.Update(ts);
-		
-		//HZ_TRACE("DeltaTime : {0}s({1}ms)", ts.GetSeconds(), ts.GetMilliseconds());
-		//CameraMove(ts);
 
 		// Render
 		Hazel::RenderCommend::SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
@@ -166,15 +162,10 @@ public:
 	void OnEvent(Hazel::Event& e) override
 	{
 		m_CameraController.OnEvent(e);
-		//Hazel::EventDispatcher dispather(e);
-		//dispather.Dispatch<Hazel::KeyPressedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnKeyPressed));
-		//dispather.Dispatch<Hazel::MouseMovedEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseMoved));
-		//dispather.Dispatch<Hazel::MouseScrolledEvent>(HZ_BIND_EVENT_FN(ExampleLayer::OnMouseScroll));
 	}
 private:
-	Hazel::OrthographicCameraController m_CameraController;
-	Hazel::PerspectiveCameraController m_PerspectiveCameraController;
-	//Hazel::Ref<Hazel::PerspectiveCamera> m_Camera;
+	//Hazel::OrthographicCameraController m_CameraController;
+	Hazel::PerspectiveCameraController m_CameraController;
 
 	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
 
@@ -190,54 +181,6 @@ private:
 
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
 	Hazel::Ref<Hazel::Texture2D> m_Texture2D;
-private:
-
-	/*void CameraMove(float deltaTime)
-	{
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_W))
-			m_Camera->KeyboardInput(Hazel::Direction::FORWARD, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_S))
-			m_Camera->KeyboardInput(Hazel::Direction::BACKWARD, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_A))
-			m_Camera->KeyboardInput(Hazel::Direction::LEFT, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_D))
-			m_Camera->KeyboardInput(Hazel::Direction::RIGHT, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_LEFT))
-			m_Camera->KeyboardInput(Hazel::Direction::ROTATE, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_RIGHT))
-			m_Camera->KeyboardInput(Hazel::Direction::ROTATE_ANTI,deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_UP))
-			m_Camera->KeyboardInput(Hazel::Direction::UP, deltaTime);
-		if (Hazel::Input::IsKeyPressed(HZ_KEY_DOWN))
-			m_Camera->KeyboardInput(Hazel::Direction::DOWN, deltaTime);
-
-	}
-	bool OnKeyPressed(Hazel::KeyPressedEvent& e)
-	{
-		if (e.GetKeyCode() == HZ_KEY_LEFT_ALT) 
-		{
-			Hazel::Application::Get().GetWindow().SwitchMouseCapture(*m_Camera);
-			return true;
-		}
-		if (e.GetKeyCode() == HZ_KEY_R)
-		{
-			m_Camera->ResetCamera();
-			return true;
-		}
-		return true;
-	}
-	
-	bool OnMouseMoved(Hazel::MouseMovedEvent& e)
-	{
-		m_Camera->MouseMovement(e.GetX(), e.GetY());
-		return true;
-	}
-	
-	bool OnMouseScroll(Hazel::MouseScrolledEvent& e)
-	{
-		m_Camera->MouseScroll(e.GetXOffset(), e.GetYOffset());
-		return true;
-	}*/
 };
 
 class SandBox : public Hazel::Application

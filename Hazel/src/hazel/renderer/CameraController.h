@@ -69,10 +69,12 @@ namespace Hazel {
 		void Reset()
 		{
 			if (m_Lock) return;
+			m_ZoomLevel = 1.0f;
+
 			m_Camera.m_Position = { 0.0f, 0.0f, 3.0f };
 			m_Camera.m_Front = { 0.0f, 0.0f, -1.0f };
 			m_Camera.m_Up = { 0.0f, 1.0f, 0.0f };
-			
+			m_Camera.m_Fov = 60.0f;
 			m_Camera.m_Yaw = -90.0f;
 			m_Camera.m_Pitch = 0.0f;
 		}

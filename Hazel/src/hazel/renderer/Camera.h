@@ -53,7 +53,7 @@ namespace Hazel {
 	{
 	public:
 		PerspectiveCamera() = default;
-		PerspectiveCamera(float fov, float aspect, float Near, float Far, float FOV_U = 65.0f, float FOV_B = 45.0f);
+		PerspectiveCamera(float fov, float aspect, float Near, float Far, float FOV_B = 45.0f, float FOV_U = 120.0f);
 
 		void SetProjection(float fov, float aspect, float Near, float Far);
 		void SetPosition(const glm::vec3& pos) { m_Position = pos; }
@@ -61,8 +61,12 @@ namespace Hazel {
 
 
 		const glm::vec3& GetPosition() { return m_Position; }
-		const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
-		glm::mat4 GetViewMatrix() 
+		const glm::mat4& GetProjectionMatrix()
+		{
+			m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), m_Aspect, m_Near, m_Far);
+			return m_ProjectionMatrix;
+		}
+		const glm::mat4& GetViewMatrix() 
 		{
 			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 			return m_ViewMatrix;
