@@ -25,9 +25,7 @@ namespace Hazel {
 		float m_ZoomLevel = 1.0f;
 		bool  m_Rotation;
 
-		OrthographicCamera m_Camera;
-
-		glm::vec3 
+		OrthographicCamera m_Camera; 
 	};
 
 
