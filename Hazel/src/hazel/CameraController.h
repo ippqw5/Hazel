@@ -24,8 +24,11 @@ namespace Hazel {
 		{
 			m_Lock = (!m_Lock);
 		}
-		void Reset() {};
-
+		void Reset() 
+		{
+			m_CameraPosition = { 0.0f, 0.0f, 0.0f };
+			m_CameraRotation = 0.0f;
+		}
 	private:
 		bool OnMouseMovement(MouseMovedEvent& e);
 		bool OnMouseScrolled(MouseScrolledEvent& e);

@@ -24,7 +24,7 @@ namespace Hazel {
 
 		void SetProjection(float left, float right, float bottom, float top);
 		void SetPosition(const glm::vec3& pos) { m_Position = pos; }
-		void SetRotation(float rotation) 
+		void SetRotation(float rotation) // rotate by (0,0,1)
 		{ 
 			m_Up.x = glm::cos(glm::radians(90.0f + rotation));
 			m_Up.y = glm::sin(glm::radians(90.0f + rotation));
@@ -37,20 +37,6 @@ namespace Hazel {
 			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 			return m_ViewMatrix;
 		}
-
-		void LockCamera() { m_Locked = true; }
-		void UnLockCamera()
-		{
-			m_Locked = false;
-			m_FirstMouse = true;
-		}
-
-		/*void ResetCamera() 
-		{
-			m_CameraPos = glm::vec3(0.0f, 0.0f, 3.0f);
-			m_CameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
-			m_CameraUp = glm::vec3(0.0f, 1.0f, 0.0f);
-		};*/
 	private:
 		glm::mat4 m_ProjectionMatrix;
 		glm::mat4 m_ViewMatrix;
