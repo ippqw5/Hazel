@@ -77,6 +77,7 @@ namespace Hazel {
 			m_Camera.m_Fov = 60.0f;
 			m_Camera.m_Yaw = -90.0f;
 			m_Camera.m_Pitch = 0.0f;
+			m_Camera.ReCalculate();
 		}
 	private:
 		bool OnMouseMovement(MouseMovedEvent& e);

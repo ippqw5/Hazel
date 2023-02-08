@@ -58,15 +58,15 @@ namespace Hazel {
 		void SetProjection(float fov, float aspect, float Near, float Far);
 		void SetPosition(const glm::vec3& pos) { m_Position = pos; }
 		void SetRotation(float rotation) { }
-
-
-		const glm::vec3& GetPosition() { return m_Position; }
-		const glm::mat4& GetProjectionMatrix()
+		void ReCalculate() 
 		{
 			m_ProjectionMatrix = glm::perspective(glm::radians(m_Fov), m_Aspect, m_Near, m_Far);
-			return m_ProjectionMatrix;
+			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 		}
-		const glm::mat4& GetViewMatrix() 
+
+		inline const glm::vec3& GetPosition() { return m_Position; }
+		inline const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
+		inline const glm::mat4& GetViewMatrix() 
 		{
 			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 			return m_ViewMatrix;

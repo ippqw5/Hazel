@@ -38,11 +38,13 @@ namespace Hazel {
 		}
 
 		inline bool IsExist(const std::string& name) const { return m_Shaders.find(name) != m_Shaders.end(); }
-
+	public:
 		static void Init();
 		static Ref<Shader> GetShader(const std::string& name);
+		static bool IsInit() { return m_IsInit; }
 	private:
 		std::unordered_map<std::string, Ref<Shader>> m_Shaders;
 		static ShaderLibrary* s_Instance;
+		static bool m_IsInit;
 	};
 }

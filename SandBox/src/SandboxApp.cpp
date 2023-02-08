@@ -1,5 +1,8 @@
 #include <Hazel.h>
 #include <imgui.h>
+#include "Sandbox2D.h"
+
+#include "hazel\Core\EntryPoint.h"
 /* --EntryPoint.h
 int main(int argc, char** argv)
 {
@@ -32,7 +35,7 @@ public:
 		-0.5f,  0.5f, 0.0f, 0.8f, 0.1f, 0.2f, 1.0f, 0.0f, 1.0f
 		};
 
-		m_VertexBuffer.reset(Hazel::VertexBuffer::Create(vertices, sizeof(vertices)));
+		m_VertexBuffer = Hazel::VertexBuffer::Create(vertices, sizeof(vertices));
 		Hazel::BufferLayout layout = {
 			{ Hazel::ShaderDataType::Float3, "a_Position" },
 			{ Hazel::ShaderDataType::Float4, "a_Color" },
@@ -41,17 +44,17 @@ public:
 		m_VertexBuffer->SetLayout(layout);
 
 		unsigned int indices[] = { 0,1,2 };
-		m_IndexBuffer.reset(Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int)));
+		m_IndexBuffer = Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int));
 
-		m_VertexArray.reset(Hazel::VertexArray::Create());
+		m_VertexArray = Hazel::VertexArray::Create();
 		m_VertexArray->AddVertexBuffer(m_VertexBuffer);
 		m_VertexArray->SetIndexBuffer(m_IndexBuffer);
 		m_VertexArray->UnBind();
 
 		unsigned int SquareIndices[] = { 3,4,5,5,6,3 };
-		m_SquareIBO.reset(Hazel::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(unsigned int)));
+		m_SquareIBO = Hazel::IndexBuffer::Create(SquareIndices, sizeof(SquareIndices) / sizeof(unsigned int));
 
-		m_SquareVAO.reset(Hazel::VertexArray::Create());
+		m_SquareVAO = Hazel::VertexArray::Create();
 		m_SquareVAO->AddVertexBuffer(m_VertexBuffer);
 		m_SquareVAO->SetIndexBuffer(m_SquareIBO);
 		m_SquareVAO->UnBind();
@@ -180,7 +183,8 @@ private:
 	glm::vec3 m_SquarePos = { 0.0f,0.0f,-0.5f };
 
 	Hazel::Ref<Hazel::Shader> m_TextureShader;
-	Hazel::Ref<Hazel::Texture2D> m_Texture2D;
+	Hazel::Ref<Hazel::Texture2D> m_Texture2D;  
+
 };
 
 class SandBox : public Hazel::Application
@@ -190,7 +194,8 @@ public:
 	{
 		HZ_INFO("Welcome to SandBox App!");
 		
-		PushLayer( new ExampleLayer());
+		//PushLayer(new ExampleLayer());
+		PushLayer(new Sandbox2D());
 	}
 	~SandBox()
 	{

@@ -38,4 +38,4 @@
 
 
 // -------Entry Point -------------------
-#include "hazel\Core\EntryPoint.h"
+//#include "hazel\Core\EntryPoint.h"

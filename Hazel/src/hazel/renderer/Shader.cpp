@@ -40,6 +40,7 @@ namespace Hazel {
 	/// <param name="shader"></param>
 	/// 
 	ShaderLibrary* ShaderLibrary::s_Instance = nullptr;
+	bool ShaderLibrary::m_IsInit = false;
 
 	void ShaderLibrary::Add(const std::string& name, const Ref<Shader>& shader)
 	{
@@ -67,22 +68,21 @@ namespace Hazel {
 		return shader;
 	}
 
-
-	static std::vector<std::string> shaders =
-	{
-		"TextureShader.glsl"
-	};
-
-
 	void ShaderLibrary::Init()
 	{
+		if (m_IsInit) return;
+		static std::vector<std::string> shaders =
+		{
+			"TextureShader.glsl",
+			"FlatColorShader.glsl"
+		};
 		s_Instance = new ShaderLibrary;
 		auto root = "./assets/Shader/";
 		for (auto& f : shaders)
 		{
 			s_Instance->Load(root + f);
 		}
-
+		m_IsInit = true;
 	}
 
 	Ref<Shader> ShaderLibrary::GetShader(const std::string& name)
