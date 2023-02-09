@@ -18,11 +18,7 @@ public:
 private:
 	Hazel::OrthographicCameraController m_CameraController;
 
-	Hazel::Ref<Hazel::VertexBuffer> m_VertexBuffer;
-	Hazel::Ref<Hazel::IndexBuffer> m_IndexBuffer;
-	Hazel::Ref<Hazel::VertexArray> m_VertexArray;
+	Hazel::Ref<Hazel::Texture2D> m_Texture;
 
-	Hazel::Ref<Hazel::Shader> m_Shader;
-
-	glm::vec3 m_SquareColor = { 0.0f,0.0f,0.0f };
+	glm::vec4 m_SquareColor = { 0.0f,0.0f,0.0f,1.0f };
 };

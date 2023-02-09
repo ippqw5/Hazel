@@ -13,7 +13,7 @@ namespace Hazel {
 		case RendererAPI::API::None:
 			HZ_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 		case RendererAPI::API::OpenGL:
-			return std::make_shared<OpenGLShader>(filepath);
+			return CreateRef<OpenGLShader>(filepath);
 		}
 
 		HZ_CORE_ASSERT(false, "Unknown RendererAPI");
@@ -27,7 +27,7 @@ namespace Hazel {
 			case RendererAPI::API::None:
 				HZ_CORE_ASSERT(false, "RendererAPI::None is currently not supported!");
 			case RendererAPI::API::OpenGL:
-				return std::make_shared<OpenGLShader>(name, vertexSource, fragmentSource);
+				return CreateRef<OpenGLShader>(name, vertexSource, fragmentSource);
 		}
 
 		HZ_CORE_ASSERT(false, "Unknown RendererAPI");

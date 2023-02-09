@@ -1,6 +1,6 @@
 #include "hzpch.h"
 #include "Renderer.h"
-
+#include "Renderer2D.h"
 namespace Hazel {
 
 	Renderer::Matrix_VP* Renderer::m_Matrix_VP = new Matrix_VP;
@@ -8,6 +8,8 @@ namespace Hazel {
 	void Renderer::Init()
 	{
 		RenderCommend::Init();
+		//ShaderLibrary::Init();
+		Renderer2D::Init();
 	}
 
 	void Renderer::OnWindowResize(uint32_t width, uint32_t height)

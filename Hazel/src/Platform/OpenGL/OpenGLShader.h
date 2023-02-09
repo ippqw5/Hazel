@@ -20,6 +20,7 @@ namespace Hazel {
 
 		virtual void UploadUniformi1(const std::string& name, int value) override;
 		virtual void UploadUniformf3(const std::string& name, const glm::vec3& value) override;
+		virtual void UploadUniformf4(const std::string& name, const glm::vec4& value) override;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) override;
 	private:
 		uint32_t m_RendererID;

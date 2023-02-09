@@ -33,6 +33,7 @@
 #include "hazel\Renderer\CameraController.h"
 
 #include "hazel\renderer\Renderer.h"
+#include "hazel\renderer\Renderer2D.h"
 #include "hazel\renderer\RenderCommend.h"
 
 

@@ -31,12 +31,12 @@ namespace Hazel {
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
+		static Application* s_Instance;
 		bool m_Running, m_Minimized = false;
 		float m_LastFrameTime = 0.0f;
 		
 		LayerStack m_LayerStack;		
 		ImGuiLayer* m_ImGuiLayer;
-		static Application* s_Instance;
 		std::unique_ptr<Window> m_Window;
 	};
 

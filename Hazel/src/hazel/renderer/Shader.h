@@ -15,6 +15,7 @@ namespace Hazel {
 
 		virtual void UploadUniformi1(const std::string& name, int value) = 0;
 		virtual void UploadUniformf3(const std::string& name, const glm::vec3& value) = 0;
+		virtual void UploadUniformf4(const std::string& name, const glm::vec4& value) = 0;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;
 
 		static Ref<Shader> CreateShader(const std::string& filepath);
