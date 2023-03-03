@@ -14,12 +14,13 @@ namespace Hazel {
 		Ref<Texture2D> WhiteTexture;
 	};
 	
-	static Renderer2DStorage* s_Renderer2DStorage;
+	static Renderer2DStorage* s_Data;
 
 
 	void  Renderer2D::Init()
 	{
-		s_Renderer2DStorage = new Renderer2DStorage();
+		HZ_PROFILE_FUNCTION();
+		s_Data = new Renderer2DStorage();
 		
 
 		float vertices[] = {
@@ -42,31 +43,35 @@ namespace Hazel {
 		unsigned int indices[] = { 0,1,2,2,3,0 };
 		squareIB = Hazel::IndexBuffer::Create(indices, sizeof(indices) / sizeof(unsigned int));
 
-		s_Renderer2DStorage->QuadVertexArray = VertexArray::Create();
-		s_Renderer2DStorage->QuadVertexArray->AddVertexBuffer(squareVB);
-		s_Renderer2DStorage->QuadVertexArray->SetIndexBuffer(squareIB);
-		s_Renderer2DStorage->QuadVertexArray->UnBind();
+		s_Data->QuadVertexArray = VertexArray::Create();
+		s_Data->QuadVertexArray->AddVertexBuffer(squareVB);
+		s_Data->QuadVertexArray->SetIndexBuffer(squareIB);
+		s_Data->QuadVertexArray->UnBind();
 
 		// In Application.cpp - Hazel::ShaderLibrary::Init();
 		// HZ_ASSERT(Hazel::ShaderLibrary::IsInit(), "ShaderLibrary not initialized!");
 
-		s_Renderer2DStorage->TextureShader = Hazel::Shader::CreateShader("./assets/Shader/TextureShader.glsl");
+		s_Data->TextureShader = Hazel::Shader::CreateShader("./assets/Shader/TextureShader.glsl");
 
-		s_Renderer2DStorage->WhiteTexture = Hazel::Texture2D::Create(1, 1);
+		s_Data->WhiteTexture = Hazel::Texture2D::Create(1, 1);
 		uint32_t whiteTextureData = 0xffffffff;
-		s_Renderer2DStorage->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
+		s_Data->WhiteTexture->SetData(&whiteTextureData, sizeof(uint32_t));
 	}
 
 	void Renderer2D::Shutdown()
 	{
-		delete s_Renderer2DStorage;
+		HZ_PROFILE_FUNCTION();
+
+		delete s_Data;
 	}
 
 	void Renderer2D::BeginScene(OrthographicCamera& camera)
 	{
-		s_Renderer2DStorage->TextureShader->Bind();
-		s_Renderer2DStorage->TextureShader->UploadUniformMat4("view", camera.GetViewMatrix());
-		s_Renderer2DStorage->TextureShader->UploadUniformMat4("projection", camera.GetProjectionMatrix());
+		HZ_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->Bind();
+		s_Data->TextureShader->UploadUniformMat4("view", camera.GetViewMatrix());
+		s_Data->TextureShader->UploadUniformMat4("projection", camera.GetProjectionMatrix());
 
 	}
 
@@ -81,34 +86,80 @@ namespace Hazel {
 
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		s_Renderer2DStorage->TextureShader->UploadUniformf4("u_Color", color);
+		HZ_PROFILE_FUNCTION();
+
+		s_Data->TextureShader->UploadUniformf4("u_Color", color);
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size, 0.0f});
-		s_Renderer2DStorage->TextureShader->UploadUniformMat4("model", model);
+		s_Data->TextureShader->UploadUniformMat4("model", model);
+		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", 1.0f);
+		s_Data->WhiteTexture->Bind(0);
+		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 
-		s_Renderer2DStorage->WhiteTexture->Bind(0);
-		s_Renderer2DStorage->TextureShader->UploadUniformi1("u_Texture", 0);
-
-		s_Renderer2DStorage->QuadVertexArray->Bind();
-		RenderCommend::DrawIndexed(s_Renderer2DStorage->QuadVertexArray);
+		s_Data->QuadVertexArray->Bind();
+		RenderCommend::DrawIndexed(s_Data->QuadVertexArray);
 	}
 
 	
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, uint32_t slot)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, slot);
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, TilingFactor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture,uint32_t slot)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor)
 	{
+		HZ_PROFILE_FUNCTION();
 
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), { size, 0.0f });
-		s_Renderer2DStorage->TextureShader->UploadUniformMat4("model", model);
-		s_Renderer2DStorage->TextureShader->UploadUniformf4("u_Color", glm::vec4(1.0f));
-		texture->Bind(slot); //slot = 0;
-		s_Renderer2DStorage->TextureShader->UploadUniformi1("u_Texture", slot);
+		s_Data->TextureShader->UploadUniformMat4("model", model);
+		s_Data->TextureShader->UploadUniformf4("u_Color", glm::vec4(1.0f));
+		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", TilingFactor);
+		texture->Bind(0); //slot = 0;
+		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 
-		s_Renderer2DStorage->QuadVertexArray->Bind();
-		RenderCommend::DrawIndexed(s_Renderer2DStorage->QuadVertexArray);
+		s_Data->QuadVertexArray->Bind();
+		RenderCommend::DrawIndexed(s_Data->QuadVertexArray);
+
+		texture->UnBind();
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), position) 
+			* glm::rotate(glm::mat4(1.0f), rotation, {0.0f, 0.0f, 1.0f})
+			* glm::scale(glm::mat4(1.0f), { size, 0.0f });
+		s_Data->TextureShader->UploadUniformf4("u_Color", color);
+		s_Data->TextureShader->UploadUniformMat4("model", model);
+		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", 1.0f);
+		s_Data->WhiteTexture->Bind(0);
+		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommend::DrawIndexed(s_Data->QuadVertexArray);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, TilingFactor, color);
+	}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	{
+		HZ_PROFILE_FUNCTION();
+
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), position)
+			* glm::rotate(glm::mat4(1.0f), rotation, { 0.0f, 0.0f, 1.0f })
+			* glm::scale(glm::mat4(1.0f), { size, 0.0f });
+		s_Data->TextureShader->UploadUniformMat4("model", model);
+		s_Data->TextureShader->UploadUniformf4("u_Color", color);
+		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", TilingFactor);
+		texture->Bind(0); //slot = 0;
+		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
+
+		s_Data->QuadVertexArray->Bind();
+		RenderCommend::DrawIndexed(s_Data->QuadVertexArray);
 
 		texture->UnBind();
 	}

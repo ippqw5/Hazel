@@ -9,20 +9,23 @@
 
 namespace Hazel {
 	
-	static bool s_GLFWInitialized = false;
+
 	static void GLFWErrorCallback(int error, const char* description)
 	{
 		HZ_CORE_ERROR("GLFW Error ({0}) : {1} ", error, description);
 	}
 
+	static uint32_t s_GLFWWindowCount = 0;
 
 	WindowsWindow::WindowsWindow(const WindowProperties& props)
 	{
+		HZ_PROFILE_FUNCTION();
 		Init(props);
 	}
 
 	void WindowsWindow::Init(const WindowProperties& props)
 	{
+
 		m_Data.Title = props.Title;
 		m_Data.Height = props.Height;
 		m_Data.Width = props.Width;
@@ -30,16 +33,23 @@ namespace Hazel {
 		HZ_CORE_INFO("Creating Window... {0} ({1} {2})", props.Title, props.Width, props.Height);
 		
 
-		if (!s_GLFWInitialized)
+		if (s_GLFWWindowCount==0)
 		{
 			// ToDo: glfwTerminate on system shutdown
-			int success = glfwInit();
-			HZ_CORE_ASSERT(success,"Could not intialize GLFW!");
+			{
+				HZ_PROFILE_SCOPE("glfwInit")
+				int success = glfwInit();
+				HZ_CORE_ASSERT(success, "Could not intialize GLFW!");
+				glfwSetErrorCallback(GLFWErrorCallback);
+			}
 
-			s_GLFWInitialized = true;
+			{
+				HZ_PROFILE_SCOPE("glfwCreateWindow")
+				m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
+				++s_GLFWWindowCount;
+			}
+
 		}
-
-		m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
 
 		//
 		// glfwMakeContextCurrent(m_Window);
@@ -145,17 +155,22 @@ namespace Hazel {
 	
 	WindowsWindow::~WindowsWindow()
 	{
+		HZ_PROFILE_FUNCTION();
 		Shutdown();
 	}
 
 	void WindowsWindow::OnUpdate()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glfwPollEvents();
 		m_Context->SwapBuffers(); //glfwSwapBuffers(m_Window);
 	}
 
 	void WindowsWindow::SetSync(bool enabled)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (enabled)
 			glfwSwapInterval(1);
 		else

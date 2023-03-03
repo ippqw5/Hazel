@@ -22,6 +22,8 @@ namespace Hazel {
 
 	void OrthographicCameraController::Update(Timestep ts)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (m_Lock) return;
 		if (Input::IsKeyPressed(HZ_KEY_W))
 			m_Camera.m_Position += ts * m_CameraTranslationSpeed * m_Camera.m_Up;
@@ -46,6 +48,8 @@ namespace Hazel {
 
 	void OrthographicCameraController::OnEvent(Event& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		Hazel::EventDispatcher dispather(e);
 		dispather.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnKeyPressed));
 		dispather.Dispatch<MouseScrolledEvent>(HZ_BIND_EVENT_FN(OrthographicCameraController::OnMouseScrolled));
@@ -59,6 +63,8 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (m_Lock) return false;
 		m_ZoomLevel -= e.GetYOffset() * 0.5f;
 		m_ZoomLevel = std::max(0.5f, m_ZoomLevel);
@@ -69,6 +75,8 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(-m_AspectRatio * m_ZoomLevel, m_AspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
 		return false;
@@ -76,6 +84,8 @@ namespace Hazel {
 
 	bool OrthographicCameraController::OnKeyPressed(Hazel::KeyPressedEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (e.GetKeyCode() == HZ_KEY_LEFT_ALT)
 		{
 			LockSwitch();
@@ -102,6 +112,8 @@ namespace Hazel {
 
 	void PerspectiveCameraController::Update(Timestep ts)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		if (m_Lock) return;
 		if (Input::IsKeyPressed(HZ_KEY_W))
 			m_Camera.m_Position += ts * m_CameraTranslationSpeed * m_Camera.m_Front;
@@ -125,6 +137,7 @@ namespace Hazel {
 
 	void PerspectiveCameraController::OnEvent(Event& e)
 	{
+		HZ_PROFILE_FUNCTION();
 		Hazel::EventDispatcher dispather(e);
 		dispather.Dispatch<KeyPressedEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnKeyPressed));
 		dispather.Dispatch<MouseMovedEvent>(HZ_BIND_EVENT_FN(PerspectiveCameraController::OnMouseMovement));
@@ -135,6 +148,7 @@ namespace Hazel {
 
 	bool PerspectiveCameraController::OnMouseMovement(MouseMovedEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
 		float xpos = e.GetX(), ypos = e.GetY();
 		if (m_Lock == true) return false;
 		if (m_FirstMouse == true)
@@ -171,6 +185,7 @@ namespace Hazel {
 
 	bool PerspectiveCameraController::OnMouseScrolled(MouseScrolledEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
 		if (m_Lock) return false;
 		m_ZoomLevel -= e.GetYOffset() * 0.5f;
 		m_ZoomLevel = std::max(0.5f, m_ZoomLevel);
@@ -189,6 +204,7 @@ namespace Hazel {
 
 	bool PerspectiveCameraController::OnWindowResized(WindowResizeEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
 		m_AspectRatio = (float)e.GetWidth() / (float)e.GetHeight();
 		m_Camera.SetProjection(m_Camera.m_Fov, m_AspectRatio, m_Camera.m_Near, m_Camera.m_Far);
 		return false;
@@ -196,6 +212,7 @@ namespace Hazel {
 
 	bool PerspectiveCameraController::OnKeyPressed(KeyPressedEvent& e)
 	{
+		HZ_PROFILE_FUNCTION();
 		if (e.GetKeyCode() == HZ_KEY_LEFT_ALT)
 		{
 			Hazel::Application::Get().GetWindow().LockSwitch();

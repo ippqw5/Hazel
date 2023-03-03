@@ -64,9 +64,9 @@ namespace Hazel {
 			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 		}
 
-		inline const glm::vec3& GetPosition() { return m_Position; }
-		inline const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
-		inline const glm::mat4& GetViewMatrix() 
+		const glm::vec3& GetPosition() { return m_Position; }
+		const glm::mat4& GetProjectionMatrix() { return m_ProjectionMatrix; }
+		const glm::mat4& GetViewMatrix() 
 		{
 			m_ViewMatrix = glm::lookAt(m_Position, m_Position + m_Front, m_Up);
 			return m_ViewMatrix;

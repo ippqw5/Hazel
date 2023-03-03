@@ -36,9 +36,6 @@ namespace Hazel {
 		virtual void Init(const WindowProperties& props);
 		virtual void Shutdown();
 	private:
-		GLFWwindow* m_Window;
-		GraphicsContext* m_Context;
-
 		struct WindowData
 		{
 			std::string Title;
@@ -47,9 +44,12 @@ namespace Hazel {
 
 			EventCallbackFn EventCallback;
 		};
-		
-		WindowData m_Data;
 	private:
+		GLFWwindow* m_Window;
+		GraphicsContext* m_Context;
+		WindowData m_Data;
+			
 		bool m_Lock = true;
+		
 	};
 }

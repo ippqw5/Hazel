@@ -12,6 +12,5 @@ namespace Hazel {
 		virtual void SetClearColor(const glm::vec4& color);
 		virtual void Clear();
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray);
-
 	};
 }

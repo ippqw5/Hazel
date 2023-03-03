@@ -18,6 +18,8 @@ namespace Hazel {
 
 	std::string OpenGLShader::Readfile(const std::string& filepath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::string sourcecode;
 		std::ifstream in(filepath, std::ios::in | std::ios::binary);
 
@@ -38,6 +40,9 @@ namespace Hazel {
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::Preprocess(const std::string& source)
 	{
+
+		HZ_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shader_src;
 		//Searches the string for the character that matches any of the characters specified in its arguments.
 		// find(),find_first_of(),find_last_of()...
@@ -68,6 +73,8 @@ namespace Hazel {
 
 	void OpenGLShader::Compile(const std::unordered_map<GLenum, std::string>& shaderSources)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		GLuint program = glCreateProgram();
 		HZ_CORE_ASSERT(shaderSources.size() <= 2, "We only support two shaders for now");
 		std::array<GLenum, 2> glShaderIDs = {0};
@@ -134,6 +141,8 @@ namespace Hazel {
 
 	OpenGLShader::OpenGLShader(const std::string& filepath)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::string sourcecode = Readfile(filepath);
 		auto shaderSources = Preprocess(sourcecode);
 		Compile(shaderSources);
@@ -155,6 +164,8 @@ namespace Hazel {
 	OpenGLShader::OpenGLShader(const std::string& name, const std::string& vertexSource, const std::string& fragmentSource)
 		: m_Name(name)
 	{
+		HZ_PROFILE_FUNCTION();
+
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSource;
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSource;
@@ -163,16 +174,21 @@ namespace Hazel {
 
 	OpenGLShader::~OpenGLShader()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glDeleteProgram(m_RendererID);
 	}
 
 	void OpenGLShader::Bind() const
 	{
+		HZ_PROFILE_FUNCTION();
+
 		glUseProgram(m_RendererID);
 	}
 
 	void OpenGLShader::UnBind() const
 	{
+		HZ_PROFILE_FUNCTION();
 		glUseProgram(0);
 	}
 
@@ -181,6 +197,12 @@ namespace Hazel {
 	{
 		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
 		glUniform1i(location, value);
+	}
+
+	void OpenGLShader::UploadUniformf1(const std::string& name, float value)
+	{
+		GLint location = glGetUniformLocation(m_RendererID, name.c_str());
+		glUniform1f(location, value);
 	}
 
 	void OpenGLShader::UploadUniformf3(const std::string& name, const glm::vec3& value)

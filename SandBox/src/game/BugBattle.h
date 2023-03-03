@@ -1,12 +1,13 @@
 #pragma once
-
 #include <Hazel.h>
 #include <imgui.h>
 
-class Sandbox2D : public Hazel::Layer
+#include "Bug.h"
+
+class BugBattle : public Hazel::Layer
 {
 public:
-	Sandbox2D();
+	BugBattle();
 
 	void OnAttach() override;
 	void OnDetach() override;
@@ -17,9 +18,6 @@ public:
 	void OnImGuiRender() override;
 private:
 	Hazel::OrthographicCameraController m_CameraController;
-
-	Hazel::Ref<Hazel::Texture2D> m_Texture;
-
-	glm::vec4 m_SquareColor = { 0.0f,0.0f,0.0f,1.0f };
-	
+	Hazel::Ref<Hazel::Texture2D> m_Background;
+	Bug m_player, m_bot;
 };

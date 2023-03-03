@@ -7,8 +7,10 @@ namespace Hazel {
 
 	void Renderer::Init()
 	{
+		HZ_PROFILE_FUNCTION();
+
 		RenderCommend::Init();
-		//ShaderLibrary::Init();
+		ShaderLibrary::Init();
 		Renderer2D::Init();
 	}
 
@@ -44,4 +46,8 @@ namespace Hazel {
 		RenderCommend::DrawIndexed(vertexArray);
 	}
 
+	void Renderer::Shutdown()
+	{
+		Renderer2D::Shutdown();
+	}
 }

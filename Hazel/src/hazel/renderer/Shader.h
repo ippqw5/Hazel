@@ -14,6 +14,7 @@ namespace Hazel {
 		virtual void UnBind() const = 0;
 
 		virtual void UploadUniformi1(const std::string& name, int value) = 0;
+		virtual void UploadUniformf1(const std::string& name, float value) = 0;
 		virtual void UploadUniformf3(const std::string& name, const glm::vec3& value) = 0;
 		virtual void UploadUniformf4(const std::string& name, const glm::vec4& value) = 0;
 		virtual void UploadUniformMat4(const std::string& name, const glm::mat4& matrix) = 0;

@@ -17,6 +17,9 @@
 #include "hazel\Core\Timestep.h"
 
 
+// -------- Debug --------------------
+#include "hazel\Debug\Instrumentor.h"
+
 // -------- Event --------------------
 #include "hazel\events\AppEvent.h"
 #include "hazel\events\KeyEvent.h"

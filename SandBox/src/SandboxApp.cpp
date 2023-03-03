@@ -1,17 +1,26 @@
 #include <Hazel.h>
 #include <imgui.h>
 #include "Sandbox2D.h"
+#include "game\BugBattle.h"
 
 #include "hazel\Core\EntryPoint.h"
 /* --EntryPoint.h
 int main(int argc, char** argv)
 {
 	Hazel::Log::Init();
-	HZ_CORE_WARN("Initialized Log!");
 
+	HZ_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Startup.json");
 	auto app = Hazel::CreateApplication();
+	HZ_PROFILE_END_SESSION();
+
+	HZ_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Runtime.json");
 	app->Run();
+	HZ_PROFILE_END_SESSION();
+
+	HZ_PROFILE_BEGIN_SESSION("Startup", "HazelProfile-Shutdown.json");
 	delete app;
+	HZ_PROFILE_END_SESSION();
+
 }
 */
 
@@ -144,6 +153,7 @@ public:
 		m_Texture2D->Bind(0);
 		m_TextureShader->Bind();
 		m_TextureShader->UploadUniformi1("u_Texture", 0);
+		m_TextureShader->UploadUniformf4("u_Color", {1.0f, 1.0f, 1.0f, 1.0f});
 		Hazel::Renderer::Submit(m_TextureShader, m_SquareVAO);
 
 		// Triangle
@@ -194,6 +204,7 @@ public:
 	{
 		HZ_INFO("Welcome to SandBox App!");
 		
+		//PushLayer(new BugBattle());
 		//PushLayer(new ExampleLayer());
 		PushLayer(new Sandbox2D());
 	}
