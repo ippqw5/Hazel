@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Hazel.h>
-#include <imgui.h>
+#include <imgui/imgui.h>
 
 class Sandbox2D : public Hazel::Layer
 {

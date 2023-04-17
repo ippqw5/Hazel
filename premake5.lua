@@ -1,7 +1,8 @@
 -- premake5.lua
 workspace "Hazel" 
 
-	architecture "x64"
+	architecture "x86_64"
+	startproject "Sandbox"
 
 	configurations
 	{
@@ -10,10 +11,10 @@ workspace "Hazel"
 	"Dist"
 	}
 
-	startproject "SandBox"
 
-outputdir="%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
+outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
@@ -82,8 +83,6 @@ project "Hazel"
 
 		defines
 		{
-			"HZ_ENABLE_ASSERTS",
-			"HZ_PLATFORM_WINDOWS",
 			"HZ_BUILD_DLL",
 			"GLFW_INCLUDE_NONE",
 		}
@@ -131,9 +130,9 @@ project "SandBox"
 	includedirs
 	{
 		"Hazel/vendor/spdlog/include",
-		"Hazel/src" ,
-		"%{IncludeDir.glm}",
-		"%{IncludeDir.ImGui}",
+		"Hazel/src",
+		"Hazel/vendor",
+		"%{IncludeDir.glm}"
 
 	}
 
@@ -143,13 +142,7 @@ project "SandBox"
 	}
 
 	filter "system:windows"
-		
 		systemversion "latest"
-
-		defines
-		{
-			"HZ_PLATFORM_WINDOWS",
-		}
 
 
 

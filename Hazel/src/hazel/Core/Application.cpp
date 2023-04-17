@@ -21,6 +21,7 @@ namespace Hazel {
 		m_Window->SetEventCallback(HZ_BIND_EVENT_FN(Application::OnEvent));
 
 		Renderer::Init();
+		//ShaderLibrary::Init();
 
 		m_ImGuiLayer = new ImGuiLayer();
 		PushOverlayer(m_ImGuiLayer);
@@ -89,18 +90,12 @@ namespace Hazel {
 
 	void Application::PushLayer(Layer* layer)
 	{
-		HZ_PROFILE_FUNCTION();
-
-		m_LayerStack.PushLayer(layer);
-		layer->OnAttach();
+		m_LayerStack.PushLayer(layer);	
 	}
 
 	void Application::PushOverlayer(Layer* overlayer)
 	{
-		HZ_PROFILE_FUNCTION();
-
 		m_LayerStack.PushOverlayer(overlayer);
-		overlayer->OnAttach();
 	}
 
 	bool Application::OnWindowClosed(WindowCloseEvent& e)

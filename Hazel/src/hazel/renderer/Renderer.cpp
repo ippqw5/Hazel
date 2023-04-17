@@ -10,7 +10,6 @@ namespace Hazel {
 		HZ_PROFILE_FUNCTION();
 
 		RenderCommend::Init();
-		ShaderLibrary::Init();
 		Renderer2D::Init();
 	}
 

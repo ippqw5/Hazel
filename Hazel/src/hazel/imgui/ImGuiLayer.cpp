@@ -1,12 +1,15 @@
-#include <hzpch.h>
-#include "ImGuiLayer.h"
-#include "hazel\Core\Application.h"
+#include "hzpch.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 
-#include <backends\imgui_impl_glfw.h>
-#include <backends\imgui_impl_opengl3.h>
+#include <imgui.h>
+#include <examples/imgui_impl_glfw.h>
+#include <examples/imgui_impl_opengl3.h>
 
-#include <glad\glad.h>
-#include <GLFW\glfw3.h>
+#include "Hazel/Core/Application.h"
+
+// TEMPORARY
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 namespace Hazel {
 
@@ -15,14 +18,8 @@ namespace Hazel {
 	{
 	}
 
-	ImGuiLayer::~ImGuiLayer()
-	{
-	}
-
 	void ImGuiLayer::OnAttach()
 	{
-		HZ_PROFILE_FUNCTION();
-
 		// Setup Dear ImGui context
 		IMGUI_CHECKVERSION();
 		ImGui::CreateContext();
@@ -49,31 +46,20 @@ namespace Hazel {
 		Application& app = Application::Get();
 		GLFWwindow* window = static_cast<GLFWwindow*>(app.GetWindow().GetNativeWindow());
 
-		// Setup Platform/Renderer backends
+		// Setup Platform/Renderer bindings
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
-		ImGui_ImplOpenGL3_Init("#version 400");
+		ImGui_ImplOpenGL3_Init("#version 410");
 	}
 
 	void ImGuiLayer::OnDetach()
 	{
-		HZ_PROFILE_FUNCTION();
-
 		ImGui_ImplOpenGL3_Shutdown();
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
 
-	//void ImGuiLayer::OnImGuiRender()
-	//{
-	//	static bool show = true;
-	//	ImGui::ShowDemoWindow(&show);
-	//}
-
-
 	void ImGuiLayer::Begin()
 	{
-		HZ_PROFILE_FUNCTION();
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
@@ -81,13 +67,11 @@ namespace Hazel {
 
 	void ImGuiLayer::End()
 	{
-		HZ_PROFILE_FUNCTION();
-
 		ImGuiIO& io = ImGui::GetIO();
 		Application& app = Application::Get();
 		io.DisplaySize = ImVec2((float)app.GetWindow().GetWidth(), (float)app.GetWindow().GetHeight());
 
-		//Rendering
+		// Rendering
 		ImGui::Render();
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -97,7 +81,7 @@ namespace Hazel {
 			ImGui::UpdatePlatformWindows();
 			ImGui::RenderPlatformWindowsDefault();
 			glfwMakeContextCurrent(backup_current_context);
-
 		}
 	}
+
 }

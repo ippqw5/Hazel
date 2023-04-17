@@ -19,25 +19,28 @@ namespace Hazel {
 		Application();
 		virtual ~Application();
 
-		virtual void Run();
-		virtual void OnEvent(Event& e);
+		void Run();
+		void OnEvent(Event& e);
 
 		void PushLayer(Layer* layer);
 		void PushOverlayer(Layer* overlayer);
 
 		inline static Application& Get() { return *s_Instance; }
+
 		inline Window& GetWindow() { return *m_Window; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnWindowResize(WindowResizeEvent& e);
 	private:
-		static Application* s_Instance;
-		bool m_Running, m_Minimized = false;
-		float m_LastFrameTime = 0.0f;
-		
-		LayerStack m_LayerStack;		
-		ImGuiLayer* m_ImGuiLayer;
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
+		bool m_Running = true;
+		bool m_Minimized = false;
+		float m_LastFrameTime = 0.0f;
+
+		LayerStack m_LayerStack;
+	private:
+		static Application* s_Instance;
 	};
 
 	// To be defined in CLIENT

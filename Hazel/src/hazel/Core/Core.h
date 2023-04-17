@@ -1,4 +1,16 @@
 #pragma once
+// Platform detection using predefined macros
+#ifdef _WIN32
+	/* Windows x64/x86 */
+#ifdef _WIN64
+	/* Windows x64  */
+#define HZ_PLATFORM_WINDOWS
+#else
+	/* Windows x86 */
+#error "x86 Builds are not supported!"
+#endif
+#endif
+
 #ifdef HZ_PLATFORM_WINDOWS
 	#if HZ_DYNAMIC_LINK
 		#ifdef HZ_BUILD_DLL
@@ -13,7 +25,6 @@
 	#error Hazel only support Windows!
 #endif
 
-#define BIT(x) (1<<x)
 
 #ifdef HZ_DEBUG 
 	#ifdef HZ_ENABLE_ASSERTS
@@ -28,6 +39,7 @@
 	#define HZ_CORE_ASSERT(x, ...) 
 #endif
 
+#define BIT(x) (1<<x)
 #define HZ_BIND_EVENT_FN(fn) std::bind(&fn, this, std::placeholders::_1)
 
 #include <memory>

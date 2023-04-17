@@ -79,12 +79,12 @@ namespace Hazel {
 	{
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float dim, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, dim, color );
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float dim, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -92,6 +92,7 @@ namespace Hazel {
 		glm::mat4 model = glm::translate(glm::mat4(1.0f), position) * glm::scale(glm::mat4(1.0f), {size, 0.0f});
 		s_Data->TextureShader->UploadUniformMat4("model", model);
 		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->UploadUniformf1("u_Dim", dim);
 		s_Data->WhiteTexture->Bind(0);
 		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 
@@ -100,12 +101,12 @@ namespace Hazel {
 	}
 
 	
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, float dim)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, texture, TilingFactor);
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, TilingFactor, dim);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float TilingFactor, float dim)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -113,6 +114,7 @@ namespace Hazel {
 		s_Data->TextureShader->UploadUniformMat4("model", model);
 		s_Data->TextureShader->UploadUniformf4("u_Color", glm::vec4(1.0f));
 		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", TilingFactor);
+		s_Data->TextureShader->UploadUniformf1("u_Dim", dim);
 		texture->Bind(0); //slot = 0;
 		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 
@@ -121,11 +123,11 @@ namespace Hazel {
 
 		texture->UnBind();
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, float dim, const glm::vec4& color)
 	{
-		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, color);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, dim, color);
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, float dim, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -135,17 +137,18 @@ namespace Hazel {
 		s_Data->TextureShader->UploadUniformf4("u_Color", color);
 		s_Data->TextureShader->UploadUniformMat4("model", model);
 		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", 1.0f);
+		s_Data->TextureShader->UploadUniformf1("u_Dim", dim);
 		s_Data->WhiteTexture->Bind(0);
 		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 
 		s_Data->QuadVertexArray->Bind();
 		RenderCommend::DrawIndexed(s_Data->QuadVertexArray);
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, float dim, const glm::vec4& color)
 	{
-		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, TilingFactor, color);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotation, texture, TilingFactor, dim, color);
 	}
-	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotation, const Ref<Texture2D>& texture, float TilingFactor, float dim, const glm::vec4& color)
 	{
 		HZ_PROFILE_FUNCTION();
 
@@ -155,6 +158,7 @@ namespace Hazel {
 		s_Data->TextureShader->UploadUniformMat4("model", model);
 		s_Data->TextureShader->UploadUniformf4("u_Color", color);
 		s_Data->TextureShader->UploadUniformf1("u_TilingFactor", TilingFactor);
+		s_Data->TextureShader->UploadUniformf1("u_Dim", dim);
 		texture->Bind(0); //slot = 0;
 		s_Data->TextureShader->UploadUniformi1("u_Texture", 0);
 

@@ -2,7 +2,7 @@
 
 #include "hazel\Core\Window.h"
 #include "hazel\renderer\Camera.h"
-#include "Platform\OpenGL\OpenGLContext.h"
+#include "Hazel/Renderer/GraphicsContext.h"
 
 #include <GLFW\glfw3.h>
 
@@ -30,12 +30,14 @@ namespace Hazel {
 		void LockSwitch() override;
 		
 
-		inline void* GetNativeWindow() const override { return m_Window; };
-
+		inline virtual void* GetNativeWindow() const { return m_Window; }
 	private:
 		virtual void Init(const WindowProperties& props);
 		virtual void Shutdown();
 	private:
+		GLFWwindow* m_Window;
+		Scope<GraphicsContext> m_Context;
+
 		struct WindowData
 		{
 			std::string Title;
@@ -44,9 +46,6 @@ namespace Hazel {
 
 			EventCallbackFn EventCallback;
 		};
-	private:
-		GLFWwindow* m_Window;
-		GraphicsContext* m_Context;
 		WindowData m_Data;
 			
 		bool m_Lock = true;

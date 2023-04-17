@@ -1,21 +1,24 @@
 #include "hzpch.h"
-#include "WindowsWindow.h"
-#include "hazel\Core\Log.h"
-#include "hazel\Core\Application.h"
+#include "Platform/Windows/WindowsWindow.h"
 
-#include "hazel\events\AppEvent.h"
-#include "hazel\events\KeyEvent.h"
-#include "hazel\events\MouseEvent.h"
+#include "Hazel/Events/AppEvent.h"
+#include "Hazel/Events/MouseEvent.h"
+#include "Hazel/Events/KeyEvent.h"
 
+#include "Platform/OpenGL/OpenGLContext.h"
 namespace Hazel {
 	
-
 	static void GLFWErrorCallback(int error, const char* description)
 	{
 		HZ_CORE_ERROR("GLFW Error ({0}) : {1} ", error, description);
 	}
 
 	static uint32_t s_GLFWWindowCount = 0;
+
+	Scope<Window> Window::Create(const WindowProperties& props)
+	{
+		return CreateScope<WindowsWindow>(props);
+	}
 
 	WindowsWindow::WindowsWindow(const WindowProperties& props)
 	{
@@ -42,34 +45,33 @@ namespace Hazel {
 				HZ_CORE_ASSERT(success, "Could not intialize GLFW!");
 				glfwSetErrorCallback(GLFWErrorCallback);
 			}
+		}
 
-			{
-				HZ_PROFILE_SCOPE("glfwCreateWindow")
-				m_Window = glfwCreateWindow(props.Width, props.Height, props.Title.c_str(), nullptr, nullptr);
-				++s_GLFWWindowCount;
-			}
-
+		{
+			HZ_PROFILE_SCOPE("glfwCreateWindow")
+			m_Window = glfwCreateWindow((int)props.Width, (int)props.Height, m_Data.Title.c_str(), nullptr, nullptr);
+			++s_GLFWWindowCount;
 		}
 
 		//
 		// glfwMakeContextCurrent(m_Window);
 		//
-		m_Context = new OpenGLContext(m_Window);
+		m_Context = GraphicsContext::Create(m_Window);
 		m_Context->Init();
+
 		
 		glfwSetWindowUserPointer(m_Window, &m_Data);
 		SetSync(true);
 
 		//Set glfw callbacks
-		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window,int width,int height)
+		glfwSetWindowSizeCallback(m_Window, [](GLFWwindow* window, int width, int height)
 		{
-				WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
-				data.Width = width; data.Height = height;
+			WindowData& data = *(WindowData*)glfwGetWindowUserPointer(window);
+			data.Width = width;
+			data.Height = height;
 
-				WindowResizeEvent e(width, height);
-				HZ_WARN("{0}, {1}", width, height);
-				data.EventCallback(e);
-
+			WindowResizeEvent event(width, height);
+			data.EventCallback(event);
 		});
 
 		glfwSetWindowCloseCallback(m_Window, [](GLFWwindow* window)
@@ -202,6 +204,12 @@ namespace Hazel {
 	void WindowsWindow::Shutdown()
 	{
 		glfwDestroyWindow(m_Window);
+		--s_GLFWWindowCount;
+
+		if (s_GLFWWindowCount == 0)
+		{
+			glfwTerminate();
+		}
 	}
 
 }

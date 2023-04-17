@@ -19,7 +19,7 @@ namespace Hazel
 		{
 
 		}
-	};
+	};	
 
 	// Interface representing a desktop system based Window
 	class HAZEL_API Window
@@ -41,7 +41,7 @@ namespace Hazel
 
 		virtual void* GetNativeWindow() const = 0;
 
-		static Window* Create(const WindowProperties& props = WindowProperties());
+		static Scope<Window> Create(const WindowProperties& props = WindowProperties());
 
 	};
 }
